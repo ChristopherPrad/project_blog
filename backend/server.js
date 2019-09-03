@@ -1,21 +1,27 @@
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const PORT = 4000;
+var express = require("express");
+var cors = require("cors");
+var bodyParser = require("body-parser");
+var app = express("");
+var mongoose = require("mongoose");
+var port = process.env.PORT || 3009;
 
-app.use(cors());
 app.use(bodyParser.json());
+app.use(cors());
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
 
-mongoose.connect("mongodb://127.0.0.1:27017/blog_project", {
-  useNewUrlParser: true
-});
-const connection = mongoose.connection;
-connection.once("open", function() {
-  console.log("MongoDB database connection established successfully");
-});
+const mongoURI = "mongodb://localhost:27017/blog_project";
 
-app.listen(PORT, function() {
-  console.log("Server is running on Port: " + PORT);
+mongoose
+  .connect(mongoURI, {
+    useNewUrlParser: true
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.log(err));
+
+app.listen(port, () => {
+  console.log("Server is running on port:" + port);
 });
